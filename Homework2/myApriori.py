@@ -6,29 +6,9 @@ import math
 from itertools import combinations
 from typing import List, Set, Tuple, Dict, Iterable
 
-
 Item = str
 Transaction = Set[Item]
 Itemset = Tuple[Item, ...]
-
-
-def read_dataset(filename: str) -> List[Transaction]:
-    """
-    Read transactions from file.
-    Each line is a transaction; items are separated by spaces.
-    Duplicate items within a transaction are removed.
-    Empty lines are ignored.
-    """
-    T: List[Transaction] = []
-    with open(filename, "r", encoding="utf-8") as f:
-        for line in f:
-            line = line.strip()
-            if not line:
-                continue
-            items = line.split()
-            # Deduplicate within a transaction; keep as set
-            T.append(set(items))
-    return T
 
 def find_f1_itemsets(T: List[Transaction], min_cnt: int) -> Dict[Itemset, int]:
     counts: Dict[Item, int] = {}
@@ -106,6 +86,24 @@ def apriori_algorithm(
         Lk = LkPlus1
         k += 1
     return all_frequents
+
+def read_dataset(filename: str) -> List[Transaction]:
+    """
+    Read transactions from file.
+    Each line is a transaction; items are separated by spaces.
+    Duplicate items within a transaction are removed.
+    Empty lines are ignored.
+    """
+    T: List[Transaction] = []
+    with open(filename, "r", encoding="utf-8") as f:
+        for line in f:
+            line = line.strip()
+            if not line:
+                continue
+            items = line.split()
+            # Deduplicate within a transaction; keep as set
+            T.append(set(items))
+    return T
 
 parser = argparse.ArgumentParser(description="Run Apriori algorithm with minsup.")
 parser.add_argument("filename", type=str, nargs="?", help="Dataset file", default="dataset1.txt")
